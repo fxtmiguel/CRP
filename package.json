@@ -18,6 +18,7 @@
     "@expo/vector-icons": "^14.0.2",
     "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
     "@react-native-async-storage/async-storage": "^1.23.1",
+    "@react-native-picker/picker": "^2.9.0",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.11.0",
     "expo": "^51.0.38",
