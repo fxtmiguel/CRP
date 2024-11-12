@@ -8,8 +8,11 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const [isSignUp, setIsSignUp] = useState(false);
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -37,7 +40,10 @@ export default function RootLayout() {
         {/* Conditionally render Login or Tabs based on authentication */}
         {isAuthenticated ? (
           <Stack.Screen name="(tabs)" />
-        ) : (
+        ) :  isSignUp ? (
+          <Stack.Screen name="register" /> 
+        ): (
+          
           <Stack.Screen name="login" />
         )}
         <Stack.Screen name="+not-found" />
