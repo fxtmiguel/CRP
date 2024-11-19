@@ -1,34 +1,37 @@
-import {View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { doc, getDoc } from "firebase/firestore";
+import * as ImagePicker from "expo-image-picker";
+import { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
+import { db, FIREBASE_AUTH } from "../FirebaseConfig";
 
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import * as ImagePicker from 'expo-image-picker';
-import {useState} from 'react';
-import { useRouter } from 'expo-router';
-
-/* TO DO:
-  need to make the users account information appear after they sign in (username, name, age)
-  going to need a counter for how many bars we have visited
-  going to need a counter for how many bars we have visited
-*/
-
-// change these later when you do backend coding
-let username = "john_doe_007"
-let name = "John Doe";
-let age = 20;
-let numBarsVisited = 50;
+async function getProfileInfo() {
+  const user = FIREBASE_AUTH.currentUser!;
+  // Get profile info from Firestore
+  const docRef = doc(db, "users", await user.uid);
+  const docSnap = await getDoc(docRef);
+  console.log(docSnap.data());
+  return docSnap.data();
+}
 
 export default function TabTwoScreen() {
-
   const router = useRouter();
+  const [name, setName] = useState("");
+  useEffect(() => {
+    getProfileInfo().then((r) => {
+      if (r) {
+        setName(r.name);
+        console.log(r);
+      }
+    });
+  });
 
-  // const [imageSrc, setImageSrc] = useState(null); // Default profile picture
   const [imageSrc, setImageSrc] = useState<string | null>(null); // Specify type as string | null
-
 
   const handleImageChange = async () => {
     // Request permission to access images
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
       alert("Permission to access camera roll is required!");
       return;
@@ -42,105 +45,95 @@ export default function TabTwoScreen() {
       quality: 1,
     });
 
-    if (!pickerResult.canceled && pickerResult.assets && pickerResult.assets.length > 0) {
+    if (
+      !pickerResult.canceled &&
+      pickerResult.assets &&
+      pickerResult.assets.length > 0
+    ) {
       setImageSrc(pickerResult.assets[0].uri); // Get the URI of the selected image
     }
   };
 
   // naviagation for the buttons
-  const navigateToPastReviews = () => router.push('../(stack)/pastReviews');
-  const navigateToPastRatings = () => router.push('../(stack)/pastRatings');
-  const navigateToFriends = () => router.push('../(stack)/friends');
+  const navigateToPastReviews = () => router.push("../(stack)/pastReviews");
+  const navigateToPastRatings = () => router.push("../(stack)/pastRatings");
+  const navigateToFriends = () => router.push("../(stack)/friends");
 
   return (
     <View style={styles.container}>
-      <ThemedView style={styles.titleContainer}>
-        {/* need to change this to actually be centered and not have the spaces */}
-        <View style={styles.centered}>
-          <ThemedText type="title">{username}{'\n'}</ThemedText>
-        </View>
-      </ThemedView>
-      {/* <Image source={require('@/assets/images/braver-blank-pfp_new.jpg')} style={{ alignSelf: 'center' }} /> */}
-      {/* going to change image on click here */}
-            {/* Profile Picture */}
-            <TouchableOpacity onPress={handleImageChange}>
-        <Image
-          source={imageSrc ? { uri: imageSrc } : require('@/assets/images/braver-blank-pfp_new.jpg')}
-          style={styles.profileImage}
-        />
+      <Text style={styles.subtitle}>Your Upcoming Events</Text>
+      <Image
+        source={
+          imageSrc
+            ? { uri: imageSrc }
+            : require("@/assets/images/braver-blank-pfp_new.jpg")
+        }
+        style={styles.profilePhoto}
+      />
+      <Text style={styles.subtitle}>About</Text>
+      <Text style={styles.label}>Name</Text>
+      <Text style={styles.label}>{name}</Text>
+      <Text style={styles.label}>Email</Text>
+      <Text style={styles.label}>rtsch@gmail.com</Text>
+      <Text style={styles.label}>Major</Text>
+      <Text style={styles.label}>Computer Science</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => FIREBASE_AUTH.signOut()}
+      >
+        <Text style={styles.text}>Sign Out</Text>
       </TouchableOpacity>
-
-      {/* Going to need to change these when the backend connects */}
-      <ThemedText>{'\n'}Name: {name}</ThemedText> 
-      <ThemedText>Age: {age}{'\n'}</ThemedText>
-      
-      {/* Past Reviews button */}
-      <TouchableOpacity style={[styles.button, styles.pastRatingsButton]} onPress={navigateToPastReviews}>
-        <Text style={styles.buttonText}>Past Reviews</Text>
-      </TouchableOpacity>
-      
-      {/* Past Ratings button */}
-      <TouchableOpacity style={[styles.button, styles.pastRatingsButton]} onPress={navigateToPastRatings}>
-        <Text style={styles.buttonText}>Past Ratings</Text>
-      </TouchableOpacity>
-
-      {/* Friends button */}
-      <TouchableOpacity style={[styles.button, styles.pastRatingsButton]} onPress={navigateToFriends}>
-        <Text style={styles.buttonText}>Friends</Text>
-      </TouchableOpacity>
-      
-      {/* Going to also need to change this when we get the back end running */}
-      <ThemedText>{'\n'}You have visited {numBarsVisited} Bars!!{'\n'}</ThemedText>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
     flex: 1,
-    backgroundColor: '#000000',
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FAFAFA", // A softer white for a modern, minimalist background
   },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
-    backgroundColor: 'rgba(0,0,0,0)',
+  subtitle: {
+    fontSize: 25,
+    fontWeight: "800",
+    color: "#1A237E",
+    marginBottom: 40,
   },
-  input: {
-    width: '100%',
-    padding: 15,
-    marginBottom: 20,
-    borderRadius: 999,
-    backgroundColor: '#333',
-    color: '#fff',
-    fontSize: 16,
-  },
-  centered: {
-    alignItems: 'center',
-  },
-  profileImage: {
+  profilePhoto: {
     width: 150,
     height: 150,
-    borderRadius: 75,
     marginBottom: 20,
   },
+  label: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: "black",
+    marginBottom: 15,
+  },
+  separator: {
+    marginVertical: 30,
+    height: 2, // Slightly thicker for a more pronounced separation
+    width: "80%",
+    backgroundColor: "#E8EAF6", // Using a light indigo to match the border of the textInput
+  },
   button: {
-    width: '75%',
-    padding: 15,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#888',
-    marginBottom: 10,
+    width: "90%",
+    backgroundColor: "#5C6BC0", // A lighter indigo to complement the title color
+    padding: 20,
+    borderRadius: 15, // Softly rounded corners for a modern, friendly touch
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#5C6BC0", // Shadow color to match the button for a cohesive look
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 5,
+    elevation: 5, // Slightly elevated for a subtle 3D effect
+    marginTop: 15, // Adjusted to match the new style
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+  text: {
+    color: "#FFFFFF", // Maintained white for clear visibility
+    fontSize: 18, // Slightly larger for emphasis
+    fontWeight: "600", // Semi-bold for a balanced weight
   },
-  pastRatingsButton: {
-    backgroundColor: '#6200EE',
-  },  
 });
