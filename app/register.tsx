@@ -12,7 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH } from "./FirebaseConfig";
 import { router } from "expo-router";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { collection, doc, setDoc } from "firebase/firestore";
 import { db } from "./FirebaseConfig";
 
 export default function Register() {
