@@ -5,26 +5,47 @@ import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { db, FIREBASE_AUTH } from "../FirebaseConfig";
 
-async function getProfileInfo() {
-  const user = FIREBASE_AUTH.currentUser!;
-  // Get profile info from Firestore
-  const docRef = doc(db, "users", await user.uid);
-  const docSnap = await getDoc(docRef);
-  console.log(docSnap.data());
-  return docSnap.data();
-}
+
 
 export default function TabTwoScreen() {
   const router = useRouter();
-  const [name, setName] = useState("");
+  const [firstName, setName] = useState("");
+  const [major, setMajor] = useState("")
+  const [email, setEmail] = useState("")
   useEffect(() => {
-    getProfileInfo().then((r) => {
-      if (r) {
-        setName(r.name);
-        console.log(r);
+    getProfileInfo().then((data) => {
+      if (data) {
+        setName(data.firstName);
+        setMajor(data.major);
+        console.log(data);
       }
     });
-  });
+  }, []);
+
+  async function getProfileInfo() {
+    const user = FIREBASE_AUTH.currentUser!;
+    console.log(user.uid);
+
+    try {
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        console.log(data);
+        return {
+          firstName: data?.firstName || "",
+          major: data?.major || "",
+        };
+      } else {
+        console.error("No such document!");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching profile info:", error);
+      return null;
+    }
+  }
 
   const [imageSrc, setImageSrc] = useState<string | null>(null); // Specify type as string | null
 
@@ -71,12 +92,10 @@ export default function TabTwoScreen() {
         style={styles.profilePhoto}
       />
       <Text style={styles.subtitle}>About</Text>
-      <Text style={styles.label}>Name</Text>
-      <Text style={styles.label}>{name}</Text>
-      <Text style={styles.label}>Email</Text>
-      <Text style={styles.label}>rtsch@gmail.com</Text>
-      <Text style={styles.label}>Major</Text>
-      <Text style={styles.label}>Computer Science</Text>
+      <Text style={styles.label}>Name:</Text>
+      <Text style={styles.label}>{firstName}</Text>
+      <Text style={styles.label}>Major:</Text>
+      <Text style={styles.label}>{major}</Text>
       <TouchableOpacity
         style={styles.button}
         onPress={() => FIREBASE_AUTH.signOut()}
