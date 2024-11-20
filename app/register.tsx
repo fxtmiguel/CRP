@@ -49,7 +49,7 @@ export default function Register() {
       // Log the document ID
       console.log('New document added with ID:', user.user.uid);
       if (user) {
-        router.replace("/");
+        router.replace("/login");
         // Create document in users
       }
     } catch (error: any) {
