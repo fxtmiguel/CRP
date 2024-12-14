@@ -39,7 +39,7 @@ export default function Login() {
   return (
     <View style={styles.container}>
       <Image
-        source={require("@/assets/images/CRP-Logo.png")}
+        source={require("@/assets/images/CRPtrans.png")}
         style={styles.logo}
       />
       <Text style={styles.title}>Login</Text>
@@ -83,20 +83,20 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20,
   },
   logo: {
-    height: 200,
-    width: 400,
+    height: 300,
+    width: 450,
     marginBottom: 40,
     resizeMode: "contain",
   },
   title: {
     fontSize: 28,
-    color: "#fff",
+    color: "#22222",
     marginBottom: 20,
     fontFamily: "Roboto",
     textTransform: "uppercase",
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     textShadowColor: "rgba(0, 0, 0, 0.3)",
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
-    padding: 10,
+    padding: 2,
     borderRadius: 5,
   },
   input: {
@@ -112,8 +112,9 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 20,
     borderRadius: 999,
-    backgroundColor: "#333",
-    color: "#fff",
+    backgroundColor: "#ffff",
+    borderWidth: 1,
+    borderColor: "grey",
     fontSize: 16,
   },
   button: {
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#6200EE",
+    backgroundColor: "#4682b4",
     marginBottom: 10,
   },
   buttonText: {
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   signUpButton: {
-    backgroundColor: "#888",
+    backgroundColor: "#404040",
   },
   signUpButtonText: {
     color: "#fff",

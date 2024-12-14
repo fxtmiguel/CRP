@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import Icon from "react-native-vector-icons/FontAwesome";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH } from "./FirebaseConfig";
 import { router } from "expo-router";
@@ -59,12 +60,15 @@ export default function Register() {
   };
 
   const handleBackPress = () => {
-    // Navigate back to the index page
     router.replace("/login");
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <TouchableOpacity onPress={handleBackPress} style={styles.backArrow}>
+        <Icon name="arrow-left" size={24} color="white" />
+      </TouchableOpacity>
+
       <Text style={styles.title}>Register</Text>
       <TextInput
         style={styles.input}
@@ -188,6 +192,12 @@ const styles = StyleSheet.create({
     height: 100,
     overflow: 'hidden',
     justifyContent: 'center',
+  },
+  backArrow: {
+    position: "absolute",
+    top: 40,
+    left: 16,
+    zIndex: 1,
   },
   picker: {
     color: "#000", // Black text color for picker

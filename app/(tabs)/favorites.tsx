@@ -16,9 +16,8 @@ export default function Favorites() {
 
   return (
     <View style={styles.container}>
-      <Image source={require('@/assets/images/WTM-Logo.png')} style={styles.WTMLogo} />
-      <Text style={styles.text}>Favorites</Text>
-
+      <Image source={require('@/assets/images/CRPtrans.png')} style={styles.CRPLogo} />
+      
       {/* On the Rox Image */}
       <View style={styles.imageContainer}>
         <TouchableOpacity onPress={() => navigateToBarProfile('On the Rox')}>
@@ -58,11 +57,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#fff'
   },
-  WTMLogo: {
+  CRPLogo: {
     height: 78,
-    width: 190,
+    width: 90,
     bottom: 720,
-    left: -50,
+    left: 0,
     position: 'absolute',
   },
   container: {
@@ -76,8 +75,8 @@ const styles = StyleSheet.create({
     bottom: 150
   },
   image: {
-    width: 320,
-    height: 440,
+    width: 120,
+    height: 140,
     borderRadius: 18,
   },
   textBox: {
