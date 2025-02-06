@@ -89,7 +89,7 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000', // Dark background
+    backgroundColor: 'grey', // Dark background
     paddingHorizontal: 20,
     paddingTop: 50,
   },

@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FAFAFA", // A softer white for a modern, minimalist background
+    backgroundColor: "grey", // A softer white for a modern, minimalist background
   },
   subtitle: {
     fontSize: 25,
