@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Image
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -68,7 +69,10 @@ export default function Register() {
       <TouchableOpacity onPress={handleBackPress} style={styles.backArrow}>
         <Icon name="arrow-left" size={24} color="white" />
       </TouchableOpacity>
-
+      <Image
+        source={require("@/assets/images/CRPtrans.png")}
+        style={styles.logo}
+      />
       <Text style={styles.title}>Register</Text>
       <TextInput
         style={styles.input}
@@ -153,7 +157,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
-    backgroundColor: "#0d47a1", // Dark blue background
+    backgroundColor: "#fffff",
   },
   backButton: {
     alignSelf: "flex-start",
@@ -164,18 +168,24 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     marginBottom: 24,
-    marginTop: 45,
-    color: "#fff", // title
+    color: "black", // title
+  },
+  logo: {
+    height: 300,
+    width: 450,
+    resizeMode: "contain",
+
   },
   input: {
     height: 40,
-    borderColor: "gray",
+    borderColor: "grey",
     borderWidth: 1,
+    borderRadius: 999,
     width: "100%",
     marginBottom: 12,
     paddingLeft: 8,
     color: "#fff", // White text color for input
-    backgroundColor: "#333", // Dark background for inputs for better visibility
+    backgroundColor: "grey"
   },
   label: {
     alignSelf: "flex-start",
