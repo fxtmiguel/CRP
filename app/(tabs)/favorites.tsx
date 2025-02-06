@@ -2,9 +2,9 @@ import { Image, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import ImageViewer from "@/components/imageView";
 
-const PlaceholderImage1 = require('@/assets/images/ontherox.png');
-const PlaceholderImage2 = require('@/assets/images/Mate-bare.jpg');
-const PlaceholderImage3 = require('@/assets/images/ice-bar.jpg');
+const PlaceholderImage1 = require("@/assets/images/blog1.png");
+const PlaceholderImage2 = require("@/assets/images/blog1.png");
+const PlaceholderImage3 = require("@/assets/images/blog1.png");
 
 export default function Favorites() {
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function Favorites() {
         <TouchableOpacity onPress={() => navigateToBarProfile('On the Rox')}>
           <ImageViewer imgSource={PlaceholderImage1} /> 
         </TouchableOpacity>
-        <Text style={styles.textBox}>Closes: 2:00</Text>
+        <Text style={styles.textBox}>Open</Text>
       </View> 
 
       {/* Matebar Image */}
@@ -31,7 +31,7 @@ export default function Favorites() {
         <TouchableOpacity onPress={() => navigateToBarProfile('Matebar')}>
           <ImageViewer imgSource={PlaceholderImage2} />
         </TouchableOpacity>
-        <Text style={styles.textBox1}>Closes: 1:30</Text>
+        <Text style={styles.textBox1}>Open</Text>
       </View> 
 
       {/* Ice Bar Image */}
@@ -39,7 +39,7 @@ export default function Favorites() {
         <TouchableOpacity onPress={() => navigateToBarProfile('Ice Bar')}>
           <ImageViewer imgSource={PlaceholderImage3} />
         </TouchableOpacity>
-        <Text style={styles.textBox2}>Closes: 1:30</Text>
+        <Text style={styles.textBox2}>Open</Text>
       </View>
     </View>
   );
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: 'grey',
     alignItems: 'center',
     justifyContent: 'center',
   },
