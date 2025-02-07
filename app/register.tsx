@@ -7,9 +7,8 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image
+  Image,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH } from "./FirebaseConfig";
@@ -33,30 +32,26 @@ export default function Register() {
         email,
         password
       );
-  
-      const myCollection = collection(db, 'users');
-      // Define the document reference
+
+      const myCollection = collection(db, "users");
       const myDocRef = doc(myCollection, user.user.uid);
       const myDocumentData = {
         firstName: firstName,
         lastName: lastName,
         ethnicity: ethnicity,
         gender: gender,
-        major: major
+        major: major,
       };
 
-      // Add the document to the collection
       await setDoc(myDocRef, myDocumentData);
 
-      // Log the document ID
-      console.log('New document added with ID:', user.user.uid);
+      console.log("New document added with ID:", user.user.uid);
       if (user) {
         router.replace("/login");
-        // Create document in users
       }
     } catch (error: any) {
       console.log(error);
-      alert("Sign in failed: " + error.message);
+      alert("Sign up failed: " + error.message);
     }
   };
 
@@ -69,24 +64,22 @@ export default function Register() {
       <TouchableOpacity onPress={handleBackPress} style={styles.backArrow}>
         <Icon name="arrow-left" size={24} color="white" />
       </TouchableOpacity>
-      <Image
-        source={require("@/assets/images/CRPtrans.png")}
-        style={styles.logo}
-      />
+      <Image source={require("@/assets/images/CRPtrans.png")} style={styles.logo} />
       <Text style={styles.title}>Register</Text>
+
       <TextInput
         style={styles.input}
         placeholder="First Name"
         value={firstName}
         onChangeText={setFirstName}
-        placeholderTextColor="#fff"
+        placeholderTextColor="#aaa"
       />
       <TextInput
         style={styles.input}
         placeholder="Last Name"
         value={lastName}
         onChangeText={setLastName}
-        placeholderTextColor="#fff"
+        placeholderTextColor="#aaa"
       />
       <TextInput
         style={styles.input}
@@ -95,7 +88,7 @@ export default function Register() {
         onChangeText={setEmail}
         autoCapitalize="none"
         keyboardType="email-address"
-        placeholderTextColor="#fff" // White text color
+        placeholderTextColor="#aaa"
       />
       <TextInput
         style={styles.input}
@@ -103,50 +96,41 @@ export default function Register() {
         value={password}
         onChangeText={setPassword}
         autoCapitalize="none"
-        placeholderTextColor="#fff" // White text color
+        placeholderTextColor="#aaa"
       />
       <TextInput
         style={styles.input}
         placeholder="Major"
         value={major}
         onChangeText={setMajor}
-        placeholderTextColor="#fff"
+        placeholderTextColor="#aaa"
       />
+
       <Text style={styles.label}>Ethnicity</Text>
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={ethnicity}
-          style={styles.picker}
-          onValueChange={(itemValue) => setEthnicity(itemValue)}
-        >
-          <Picker.Item label="Select Ethnicity" value="" />
-          <Picker.Item label="Asian" value="asian" />
-          <Picker.Item
-            label="Black or African American"
-            value="black_or_african_american"
-          />
-          <Picker.Item label="Hispanic or Latino" value="hispanic_or_latino" />
-          <Picker.Item label="White" value="white" />
-          <Picker.Item label="Other" value="other" />
-        </Picker>
-      </View>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Ethnicity"
+        value={ethnicity}
+        onChangeText={setEthnicity}
+        placeholderTextColor="#aaa"
+      />
+
       <Text style={styles.label}>Gender</Text>
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={gender}
-          style={styles.picker}
-          onValueChange={(itemValue) => setGender(itemValue)}
-        >
-          <Picker.Item label="Select Gender" value="" />
-          <Picker.Item label="Male" value="male" />
-          <Picker.Item label="Female" value="female" />
-          <Picker.Item label="Other" value="other" />
-        </Picker>
-      </View>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Gender"
+        value={gender}
+        onChangeText={setGender}
+        placeholderTextColor="#aaa"
+      />
+
       <TouchableOpacity onPress={handleBackPress}>
         <Text style={styles.backButton}>Already have an account? Login</Text>
       </TouchableOpacity>
-      <Button title="Register" onPress={handleRegister} />
+
+      <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
+        <Text style={styles.registerButtonText}>Register</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
@@ -157,51 +141,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
-    backgroundColor: "#fffff",
-  },
-  backButton: {
-    alignSelf: "flex-start",
-    marginBottom: 16,
-    color: "yellow",
-    textDecorationLine: "underline",
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 24,
-    color: "black", // title
-  },
-  logo: {
-    height: 300,
-    width: 450,
-    resizeMode: "contain",
-
-  },
-  input: {
-    height: 40,
-    borderColor: "grey",
-    borderWidth: 1,
-    borderRadius: 999,
-    width: "100%",
-    marginBottom: 12,
-    paddingLeft: 8,
-    color: "#fff", // White text color for input
-    backgroundColor: "grey"
-  },
-  label: {
-    alignSelf: "flex-start",
-    marginBottom: 4,
-    marginTop: 12,
-    color: "#fff", // White color for labels
-  },
-  pickerContainer: {
-    width: "100%",
-    backgroundColor: "#fff", // White background for picker container
-    borderRadius: 4,
-    marginBottom: 12,
-    padding: 0,
-    height: 100,
-    overflow: 'hidden',
-    justifyContent: 'center',
+    backgroundColor: "#ffffff",
   },
   backArrow: {
     position: "absolute",
@@ -209,7 +149,51 @@ const styles = StyleSheet.create({
     left: 16,
     zIndex: 1,
   },
-  picker: {
-    color: "#000", // Black text color for picker
+  logo: {
+    height: 200,
+    width: 300,
+    resizeMode: "contain",
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "#333",
+  },
+  input: {
+    height: 50,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 25,
+    width: "90%",
+    marginBottom: 16,
+    paddingLeft: 12,
+    color: "#333",
+    backgroundColor: "#f1f1f1",
+  },
+  label: {
+    alignSelf: "flex-start",
+    marginBottom: 4,
+    marginLeft: 16,
+    color: "#333",
+  },
+  backButton: {
+    alignSelf: "flex-start",
+    marginTop: 16,
+    color: "#007BFF",
+    textDecorationLine: "underline",
+  },
+  registerButton: {
+    backgroundColor: "#007BFF",
+    paddingVertical: 12,
+    paddingHorizontal: 60,
+    borderRadius: 25,
+    marginTop: 20,
+  },
+  registerButtonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });

@@ -29,16 +29,16 @@ export default function TabLayout() {
       <Tabs.Screen
         name="favorites"
         options={{
-          title: 'Favorites',
+          title: 'Chats',
           tabBarIcon: ({ color, focused }) => (
-            <Entypo name="heart-outlined" size={30} color={color} />
+            <Entypo name="users" size={30} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="customize"
         options={{
-          title: 'Customize Profile',
+          title: 'Profile',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
           ),

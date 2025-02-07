@@ -34,7 +34,7 @@ export default function TabTwoScreen() {
         const data = docSnap.data();
         console.log(data);
         return {
-          firstName: data?.firstName || "",
+          firstName: data?.['first-name'] || "",
           major: data?.major || "",
         };
       } else {
@@ -75,10 +75,6 @@ export default function TabTwoScreen() {
     }
   };
 
-  // naviagation for the buttons
-  const navigateToPastReviews = () => router.push("../(stack)/pastReviews");
-  const navigateToPastRatings = () => router.push("../(stack)/pastRatings");
-  const navigateToFriends = () => router.push("../(stack)/friends");
 
   return (
     <View style={styles.container}>
@@ -100,7 +96,7 @@ export default function TabTwoScreen() {
         style={styles.button}
         onPress={() => FIREBASE_AUTH.signOut()}
       >
-        <Text style={styles.text}>Sign Out</Text>
+        <Text style={styles.text}>Edit Profile</Text>
       </TouchableOpacity>
     </View>
   );

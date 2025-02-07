@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
-import { TopNav } from "@/components/TopNav";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../FirebaseConfig"; // Adjust path if needed
 
@@ -22,7 +21,7 @@ interface Resource {
 
 export default function HomeScreen() {
   const router = useRouter();
-  const [resources, setResources] = useState<Resource[]>([]); // Use the Resource type here
+  const [resources, setResources] = useState<Resource[]>([]);
 
   // Fetch resources from Firestore
   useEffect(() => {
@@ -30,46 +29,45 @@ export default function HomeScreen() {
       const resourceData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-      })) as Resource[]; // Type assertion here
+      })) as Resource[];
       setResources(resourceData);
-      
     });
     return unsubscribe;
   }, []);
 
+  // Ensure we only display two resources
+  const displayedResources = resources.slice(0, 2);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {/* CRP Logo */}
       <Image
         style={styles.tinyLogo}
         source={require("@/assets/images/CRP-Logo.png")}
       />
-      <TopNav link1="Blog" link2="Resources" />
 
-      {/* Static Blog Section */}
-      <Image
-        style={styles.blogPhoto}
-        source={require("@/assets/images/blog1.png")}
-      />
-      <Text style={styles.bodyText}>
-        The effectiveness of an internship on professional prospects
-      </Text>
-
-      {/* Dynamic Resources Section */}
-      {resources.map((resource) => (
-        
+      {/* Navigation Buttons */}
+      <View style={styles.navContainer}>
+        <TouchableOpacity style={styles.navButtonActive}>
+          <Text style={styles.navText}>Blog</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.navButton}
+          onPress={() => router.push("/")}
+        >
+          <Text style={styles.navText}>Resources</Text>
+        </TouchableOpacity>
+      </View>
+      
+      {/* Dynamic Resources Section (Only First 2 Images) */}
+      {displayedResources.map((resource) => (
         <TouchableOpacity
           key={resource.id}
           onPress={() => console.log("Clicked:", resource.imageUrl)}
         >
-          <Image
-            style={styles.blogPhoto2}
-            
-            source={{ uri: resource.imageUrl}}
-          />
+          <Image style={styles.blogPhoto} source={{ uri: resource.imageUrl }} />
           <Text style={styles.bodyText}>{resource.title}</Text>
-          <Text style={styles.resourceDescription}>
-            {resource.description}
-          </Text>
+          <Text style={styles.resourceDescription}>{resource.description}</Text>
         </TouchableOpacity>
       ))}
     </ScrollView>
@@ -79,36 +77,63 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start", // Align items to the top
     alignItems: "center",
     padding: 16,
     backgroundColor: "grey",
   },
   tinyLogo: {
-    width: 100,
-    height: 50,
-    position: "absolute",
-    top: 60,
-    alignContent: "center",
+    width: 150,
+    height: 75,
+    marginTop: 40, // Adds space from the top of the screen
+    alignSelf: "center",
+  },
+  navContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 20, // Space between logo and buttons
+  },
+  navButton: {
+    backgroundColor: "#555", // Darker color for inactive tab
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginHorizontal: 10,
+    borderRadius: 10,
+  },
+  navButtonActive: {
+    backgroundColor: "#007BFF", // Highlighted color for active page
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginHorizontal: 10,
+    borderRadius: 10,
+  },
+  navText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   blogPhoto: {
     width: 347,
     height: 151,
-    marginBottom: 20,
-  },
-  blogPhoto2: {
-    width: 347,
-    height: 151,
-    marginBottom: 20,
+    marginTop: 20, // Adds space between the buttons and the images
+    marginBottom: 20, // Adds space between the images
+    borderRadius: 15,
+    overflow: "hidden",
   },
   bodyText: {
     fontSize: 17,
     marginBottom: 8,
     color: "#fff",
+    textAlign: "left",
+    alignSelf: "flex-start",
+    width: "90%",
   },
   resourceDescription: {
     fontSize: 14,
     marginBottom: 24,
     color: "#ccc",
+    textAlign: "left",
+    alignSelf: "flex-start",
+    width: "90%",
   },
 });
