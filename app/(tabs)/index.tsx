@@ -43,7 +43,7 @@ export default function HomeScreen() {
       {/* CRP Logo */}
       <Image
         style={styles.tinyLogo}
-        source={require("@/assets/images/CRP-Logo.png")}
+        source={require("@/assets/images/CRPtrans.png")}
       />
 
       {/* Navigation Buttons */}
@@ -83,10 +83,11 @@ const styles = StyleSheet.create({
     backgroundColor: "grey",
   },
   tinyLogo: {
-    width: 150,
-    height: 75,
+    width: 250,
+    height: 125,
     marginTop: 40, // Adds space from the top of the screen
     alignSelf: "center",
+    resizeMode: "contain", // This ensures the logo is resized to fit within the bounds without cropping
   },
   navContainer: {
     flexDirection: "row",

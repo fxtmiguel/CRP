@@ -34,7 +34,7 @@ export default function TabTwoScreen() {
         const data = docSnap.data();
         console.log(data);
         return {
-          firstName: data?.['first-name'] || "",
+          firstName: data?.['firstName'] || "",
           major: data?.major || "",
         };
       } else {

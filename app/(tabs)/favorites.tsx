@@ -2,7 +2,7 @@ import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 
 const PlaceholderImage1 = require("@/assets/images/blog1.png");
-const PlaceholderImage2 = require("@/assets/images/blog1.png");
+const PlaceholderImage2 = require("@/assets/images/Gilead.jpg");
 
 export default function ChatsScreen() {
   const router = useRouter();

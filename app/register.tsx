@@ -3,12 +3,11 @@ import {
   Text,
   TextInput,
   View,
-  Button,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
   Image,
 } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH } from "./FirebaseConfig";
@@ -22,25 +21,35 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [major, setMajor] = useState("");
-  const [ethnicity, setEthnicity] = useState("");
-  const [gender, setGender] = useState("");
+  const [ethnicity, setEthnicity] = useState(null);
+  const [gender, setGender] = useState(null);
+  const [ethnicityOpen, setEthnicityOpen] = useState(false);
+  const [genderOpen, setGenderOpen] = useState(false);
+  const [ethnicityItems, setEthnicityItems] = useState([
+    { label: "Asian", value: "Asian" },
+    { label: "Black or African American", value: "Black" },
+    { label: "Hispanic or Latino", value: "Hispanic" },
+    { label: "White", value: "White" },
+    { label: "Other", value: "Other" },
+  ]);
+  const [genderItems, setGenderItems] = useState([
+    { label: "Male", value: "Male" },
+    { label: "Female", value: "Female" },
+    { label: "Other", value: "Other" },
+  ]);
 
   const handleRegister = async () => {
     try {
-      const user = await createUserWithEmailAndPassword(
-        FIREBASE_AUTH,
-        email,
-        password
-      );
+      const user = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
 
       const myCollection = collection(db, "users");
       const myDocRef = doc(myCollection, user.user.uid);
       const myDocumentData = {
-        firstName: firstName,
-        lastName: lastName,
-        ethnicity: ethnicity,
-        gender: gender,
-        major: major,
+        firstName,
+        lastName,
+        ethnicity,
+        gender,
+        major,
       };
 
       await setDoc(myDocRef, myDocumentData);
@@ -49,9 +58,9 @@ export default function Register() {
       if (user) {
         router.replace("/login");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.log(error);
-      alert("Sign up failed: " + error.message);
+      alert("Sign up failed: " + (error));
     }
   };
 
@@ -60,69 +69,23 @@ export default function Register() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <TouchableOpacity onPress={handleBackPress} style={styles.backArrow}>
-        <Icon name="arrow-left" size={24} color="white" />
+        <Icon name="arrow-left" size={24} color="#007BFF" />
       </TouchableOpacity>
       <Image source={require("@/assets/images/CRPtrans.png")} style={styles.logo} />
       <Text style={styles.title}>Register</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="First Name"
-        value={firstName}
-        onChangeText={setFirstName}
-        placeholderTextColor="#aaa"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Last Name"
-        value={lastName}
-        onChangeText={setLastName}
-        placeholderTextColor="#aaa"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="School Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-        placeholderTextColor="#aaa"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        autoCapitalize="none"
-        placeholderTextColor="#aaa"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Major"
-        value={major}
-        onChangeText={setMajor}
-        placeholderTextColor="#aaa"
-      />
-
-      <Text style={styles.label}>Ethnicity</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Ethnicity"
-        value={ethnicity}
-        onChangeText={setEthnicity}
-        placeholderTextColor="#aaa"
-      />
-
-      <Text style={styles.label}>Gender</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Gender"
-        value={gender}
-        onChangeText={setGender}
-        placeholderTextColor="#aaa"
-      />
+      <View style={styles.inputContainer}>
+        <TextInput style={styles.input} placeholder="First Name" value={firstName} onChangeText={setFirstName} placeholderTextColor="#aaa" />
+        <TextInput style={styles.input} placeholder="Last Name" value={lastName} onChangeText={setLastName} placeholderTextColor="#aaa" />
+        <TextInput style={styles.input} placeholder="School Email" value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" placeholderTextColor="#aaa" />
+        <TextInput style={styles.input} placeholder="Password" value={password} onChangeText={setPassword} autoCapitalize="none" placeholderTextColor="#aaa" secureTextEntry={true}/>
+        <TextInput style={styles.input} placeholder="Major" value={major} onChangeText={setMajor} placeholderTextColor="#aaa" />
+        
+        <DropDownPicker open={ethnicityOpen} value={ethnicity} items={ethnicityItems} setOpen={setEthnicityOpen} setValue={setEthnicity} setItems={setEthnicityItems} placeholder="Select Ethnicity" style={styles.dropdown} zIndex={3000} zIndexInverse={1000} />
+        <DropDownPicker open={genderOpen} value={gender} items={genderItems} setOpen={setGenderOpen} setValue={setGender} setItems={setGenderItems} placeholder="Select Gender" style={styles.dropdown} zIndex={2000} zIndexInverse={2000} />
+      </View>
 
       <TouchableOpacity onPress={handleBackPress}>
         <Text style={styles.backButton}>Already have an account? Login</Text>
@@ -131,17 +94,21 @@ export default function Register() {
       <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
         <Text style={styles.registerButtonText}>Register</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
     backgroundColor: "#ffffff",
+  },
+  inputContainer: {
+    width: "90%",
+    alignItems: "center",
   },
   backArrow: {
     position: "absolute",
@@ -150,13 +117,13 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   logo: {
-    height: 200,
-    width: 300,
+    height: 150,
+    width: 250,
     resizeMode: "contain",
     marginBottom: 20,
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: "bold",
     marginBottom: 20,
     color: "#333",
@@ -166,20 +133,17 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderWidth: 1,
     borderRadius: 25,
-    width: "90%",
-    marginBottom: 16,
+    width: "100%",
+    marginBottom: 12,
     paddingLeft: 12,
     color: "#333",
     backgroundColor: "#f1f1f1",
   },
-  label: {
-    alignSelf: "flex-start",
-    marginBottom: 4,
-    marginLeft: 16,
-    color: "#333",
+  dropdown: {
+    width: "100%",
+    marginBottom: 12,
   },
   backButton: {
-    alignSelf: "flex-start",
     marginTop: 16,
     color: "#007BFF",
     textDecorationLine: "underline",
