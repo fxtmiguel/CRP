@@ -8,8 +8,7 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
-import { collection, onSnapshot } from "firebase/firestore";
-import { db } from "../FirebaseConfig"; // Adjust path if needed
+import { supabase } from "../SupabaseConfig"; // Import Supabase client
 
 // Define the shape of a resource
 interface Resource {
@@ -23,16 +22,32 @@ export default function HomeScreen() {
   const router = useRouter();
   const [resources, setResources] = useState<Resource[]>([]);
 
-  // Fetch resources from Firestore
+  // Fetch resources from Supabase
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "resources"), (snapshot) => {
-      const resourceData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Resource[];
-      setResources(resourceData);
-    });
-    return unsubscribe;
+    const fetchResources = async () => {
+      const { data, error } = await supabase.from("resources").select("*");
+      if (error) {
+        console.error("Error fetching resources:", error);
+      } else {
+        setResources(data);
+      }
+    };
+
+    fetchResources();
+
+    // Optional: Set up real-time updates (uncomment if needed)
+    const subscription = supabase
+      .channel("resources")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "resources" },
+        fetchResources
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
   }, []);
 
   // Ensure we only display two resources
@@ -58,7 +73,7 @@ export default function HomeScreen() {
           <Text style={styles.navText}>Resources</Text>
         </TouchableOpacity>
       </View>
-      
+
       {/* Dynamic Resources Section (Only First 2 Images) */}
       {displayedResources.map((resource) => (
         <TouchableOpacity
@@ -77,7 +92,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "flex-start", // Align items to the top
+    justifyContent: "flex-start",
     alignItems: "center",
     padding: 16,
     backgroundColor: "grey",
@@ -85,24 +100,24 @@ const styles = StyleSheet.create({
   tinyLogo: {
     width: 250,
     height: 125,
-    marginTop: 40, // Adds space from the top of the screen
+    marginTop: 40,
     alignSelf: "center",
-    resizeMode: "contain", // This ensures the logo is resized to fit within the bounds without cropping
+    resizeMode: "contain",
   },
   navContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 20, // Space between logo and buttons
+    marginTop: 20,
   },
   navButton: {
-    backgroundColor: "#555", // Darker color for inactive tab
+    backgroundColor: "#555",
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginHorizontal: 10,
     borderRadius: 10,
   },
   navButtonActive: {
-    backgroundColor: "#007BFF", // Highlighted color for active page
+    backgroundColor: "#007BFF",
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginHorizontal: 10,
@@ -116,8 +131,8 @@ const styles = StyleSheet.create({
   blogPhoto: {
     width: 347,
     height: 151,
-    marginTop: 20, // Adds space between the buttons and the images
-    marginBottom: 20, // Adds space between the images
+    marginTop: 20,
+    marginBottom: 20,
     borderRadius: 15,
     overflow: "hidden",
   },

@@ -8,7 +8,7 @@ import {
   Image,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { FIREBASE_AUTH, signInWithEmailAndPassword } from "./FirebaseConfig"; // Import from firebaseConfig
+import { supabase } from "./SupabaseConfig"; // Import from Supabase configuration
 
 export default function Login() {
   const router = useRouter();
@@ -18,20 +18,17 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      // Sign in using Firebase Authentication
-      await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
       console.log("Login successful");
-      // Redirect to the home page (index)
       router.push("./(tabs)");
     } catch (error) {
-      // Handle login error
-      console.error("error");
+      console.error(error);
       setErrorMessage("Invalid email or password");
     }
   };
 
   const handleSignUp = () => {
-    // Handle sign-up logic here (you could navigate to a sign-up page)
     router.push("/register");
     console.log("Redirect to sign-up page");
   };
@@ -43,11 +40,7 @@ export default function Login() {
         style={styles.logo}
       />
       <Text style={styles.title}>Login</Text>
-
-      {errorMessage ? (
-        <Text style={styles.errorText}>{errorMessage}</Text>
-      ) : null}
-
+      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -65,15 +58,10 @@ export default function Login() {
         onChangeText={setPassword}
         secureTextEntry
       />
-
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.button, styles.signUpButton]}
-        onPress={handleSignUp}
-      >
+      <TouchableOpacity style={[styles.button, styles.signUpButton]} onPress={handleSignUp}>
         <Text style={styles.signUpButtonText}>Sign Up</Text>
       </TouchableOpacity>
     </View>

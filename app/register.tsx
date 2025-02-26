@@ -9,11 +9,9 @@ import {
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { FIREBASE_AUTH } from "./FirebaseConfig";
 import { router } from "expo-router";
-import { collection, doc, setDoc } from "firebase/firestore";
-import { db } from "./FirebaseConfig";
+import { supabase } from "./SupabaseConfig"; // Import from Supabase configuration
+
 
 export default function Register() {
   const [firstName, setFirstName] = useState("");
@@ -40,27 +38,33 @@ export default function Register() {
 
   const handleRegister = async () => {
     try {
-      const user = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
-
-      const myCollection = collection(db, "users");
-      const myDocRef = doc(myCollection, user.user.uid);
-      const myDocumentData = {
-        firstName,
-        lastName,
-        ethnicity,
-        gender,
-        major,
-      };
-
-      await setDoc(myDocRef, myDocumentData);
-
-      console.log("New document added with ID:", user.user.uid);
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+      if (error) throw error;
+      
+      const user = data.user;
       if (user) {
+        await supabase.from("users").insert([
+          {
+            id: user.id,
+            firstName,
+            lastName,
+            ethnicity,
+            gender,
+            major,
+          },
+        ]);
         router.replace("/login");
       }
     } catch (error) {
-      console.log(error);
-      alert("Sign up failed: " + (error));
+      console.error(error);
+      if (error instanceof Error) {
+        alert("Sign up failed: " + error.message);
+      } else {
+        alert("Sign up failed");
+      }
     }
   };
 

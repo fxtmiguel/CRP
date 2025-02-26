@@ -1,53 +1,46 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { doc, getDoc } from "firebase/firestore";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
-import { db, FIREBASE_AUTH } from "../FirebaseConfig";
-
-
+import { supabase } from "../SupabaseConfig"; // Import Supabase client
 
 export default function TabTwoScreen() {
   const router = useRouter();
-  const [firstName, setName] = useState("");
-  const [major, setMajor] = useState("")
-  const [email, setEmail] = useState("")
+  const [firstName, setFirstName] = useState("");
+  const [major, setMajor] = useState("");
+  const [email, setEmail] = useState("");
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+
+  // Fetch user profile data from Supabase
   useEffect(() => {
-    getProfileInfo().then((data) => {
-      if (data) {
-        setName(data.firstName);
-        setMajor(data.major);
-        console.log(data);
+    const fetchProfileInfo = async () => {
+      const { data: user, error: authError } = await supabase.auth.getUser();
+
+      if (authError || !user?.user) {
+        console.error("Error fetching user:", authError);
+        return;
       }
-    });
+
+      const userId = user.user.id;
+      console.log("User ID:", userId);
+
+      const { data, error } = await supabase
+        .from("users")
+        .select("firstName, major, email")
+        .eq("id", userId)
+        .single();
+
+      if (error) {
+        console.error("Error fetching profile info:", error);
+      } else if (data) {
+        setFirstName(data.firstName || "");
+        setMajor(data.major || "");
+        setEmail(data.email || "");
+      }
+    };
+
+    fetchProfileInfo();
   }, []);
-
-  async function getProfileInfo() {
-    const user = FIREBASE_AUTH.currentUser!;
-    console.log(user.uid);
-
-    try {
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        console.log(data);
-        return {
-          firstName: data?.['firstName'] || "",
-          major: data?.major || "",
-        };
-      } else {
-        console.error("No such document!");
-        return null;
-      }
-    } catch (error) {
-      console.error("Error fetching profile info:", error);
-      return null;
-    }
-  }
-
-  const [imageSrc, setImageSrc] = useState<string | null>(null); // Specify type as string | null
 
   const handleImageChange = async () => {
     // Request permission to access images
@@ -75,6 +68,10 @@ export default function TabTwoScreen() {
     }
   };
 
+  const handleEditProfile = () => {
+    // Placeholder function for navigating to an edit profile screen
+    console.log("Edit Profile Clicked");
+  };
 
   return (
     <View style={styles.container}>
@@ -92,10 +89,7 @@ export default function TabTwoScreen() {
       <Text style={styles.label}>{firstName}</Text>
       <Text style={styles.label}>Major:</Text>
       <Text style={styles.label}>{major}</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => FIREBASE_AUTH.signOut()}
-      >
+      <TouchableOpacity style={styles.button} onPress={handleEditProfile}>
         <Text style={styles.text}>Edit Profile</Text>
       </TouchableOpacity>
     </View>
@@ -107,7 +101,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "grey", // A softer white for a modern, minimalist background
+    backgroundColor: "grey",
   },
   subtitle: {
     fontSize: 25,
@@ -126,29 +120,23 @@ const styles = StyleSheet.create({
     color: "black",
     marginBottom: 15,
   },
-  separator: {
-    marginVertical: 30,
-    height: 2, // Slightly thicker for a more pronounced separation
-    width: "80%",
-    backgroundColor: "#E8EAF6", // Using a light indigo to match the border of the textInput
-  },
   button: {
     width: "90%",
-    backgroundColor: "#5C6BC0", // A lighter indigo to complement the title color
+    backgroundColor: "#5C6BC0",
     padding: 20,
-    borderRadius: 15, // Softly rounded corners for a modern, friendly touch
+    borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#5C6BC0", // Shadow color to match the button for a cohesive look
+    shadowColor: "#5C6BC0",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 5,
-    elevation: 5, // Slightly elevated for a subtle 3D effect
-    marginTop: 15, // Adjusted to match the new style
+    elevation: 5,
+    marginTop: 15,
   },
   text: {
-    color: "#FFFFFF", // Maintained white for clear visibility
-    fontSize: 18, // Slightly larger for emphasis
-    fontWeight: "600", // Semi-bold for a balanced weight
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "600",
   },
 });

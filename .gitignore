@@ -19,10 +19,8 @@ web-build/
 expo-env.d.ts
 # @end expo-cli
 
-# Firebase (if you had Firebase-related files)
-firebase.json
-.firebaserc
-firestore.rules
-firestore.indexes.json
-storage.rules
-firebaseConfig.ts
+# Supabase
+supabase/.env
+supabase/migrations/*
+supabase/seeds/*
+SupabaseConfig.ts
