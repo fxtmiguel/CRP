@@ -33,7 +33,7 @@ export default function ChatScreen() {
         .from("messages")
         .select("*")
         .eq("group_id", groupId)
-        .order("created_at", { ascending: true });
+        .order("created_at", { ascending: false });
   
       if (error) {
         console.error("Error fetching messages:", error);
@@ -60,6 +60,7 @@ export default function ChatScreen() {
                 console.error("Error sending message:", error);
                 setErrorMessage("Failed to send message.");
               } else {
+                fetchMessages();
                 setNewMessage(""); // Clear input after sending
               }
         }
