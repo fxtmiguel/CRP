@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     padding: 16,
-    backgroundColor: "grey",
+    backgroundColor: "white",
   },
   tinyLogo: {
     width: 250,

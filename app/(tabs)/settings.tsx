@@ -20,48 +20,48 @@ export default function SettingsScreen() {
 
       <TouchableOpacity style={styles.item}>
         <View style={styles.iconText}>
-          <FontAwesome name="user-o" size={24} color="#fff" />
+          <FontAwesome style={styles.icon} name="user-o" size={24} color="#000" />
           <Text style={styles.text}>Accounts</Text>
         </View>
-        <Entypo name="chevron-right" size={24} color="#fff" />
+        <Entypo name="chevron-right" size={24} color="#AAA" />
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.item}>
         <View style={styles.iconText}>
-          <FontAwesome name="bell-o" size={24} color="#fff" />
+          <FontAwesome style={styles.icon} name="bell-o" size={24} color="#000" />
           <Text style={styles.text}>Notifications</Text>
         </View>
-        <Entypo name="chevron-right" size={24} color="#fff" />
+        <Entypo name="chevron-right" size={24} color="#AAA" />
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.item}>
         <View style={styles.iconText}>
-          <FontAwesome name="question-circle-o" size={24} color="#fff" />
+          <FontAwesome style={styles.icon} name="question-circle-o" size={24} color="#000" />
           <Text style={styles.text}>Customer Support</Text>
         </View>
-        <Entypo name="chevron-right" size={24} color="#fff" />
+        <Entypo name="chevron-right" size={24} color="#AAA" />
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.item}>
         <View style={styles.iconText}>
-          <FontAwesome name="lock" size={24} color="#fff" />
+          <FontAwesome style={styles.icon} name="lock" size={24} color="#000" />
           <Text style={styles.text}>Privacy</Text>
         </View>
-        <Entypo name="chevron-right" size={24} color="#fff" />
+        <Entypo name="chevron-right" size={24} color="#AAA" />
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.item}>
         <View style={styles.iconText}>
-          <FontAwesome name="eye" size={24} color="#fff" />
+          <FontAwesome style={styles.icon} name="eye" size={24} color="#000" />
           <Text style={styles.text}>Appearances</Text>
         </View>
-        <Entypo name="chevron-right" size={24} color="#fff" />
+        <Entypo name="chevron-right" size={24} color="#AAA" />
       </TouchableOpacity>
 
       <View style={styles.item}>
         <View style={styles.iconText}>
-          <FontAwesome name="sun-o" size={24} color="#fff" />
-          <Text style={styles.text}>Light/Night Mode</Text>
+          <FontAwesome style={styles.icon} name="sun-o" size={24} color="#000" />
+          <Text style={styles.text}>Dark Mode</Text>
         </View>
         <Switch
           trackColor={{ false: '#767577', true: '#81b0ff' }}
@@ -73,15 +73,13 @@ export default function SettingsScreen() {
 
       <TouchableOpacity style={styles.item}>
         <View style={styles.iconText}>
-          <FontAwesome name="info-circle" size={24} color="#fff" />
+          <FontAwesome style={styles.icon} name="info-circle" size={24} color="#000" />
           <Text style={styles.text}>About</Text>
         </View>
-        <Entypo name="chevron-right" size={24} color="#fff" />
+        <Entypo name="chevron-right" size={24} color="#AAA" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
-        <Text style={styles.signOutText}>Sign Out</Text>
-      </TouchableOpacity>
+      <Text style={styles.signOutText} onPress={handleSignOut}>Sign Out</Text>
     </ScrollView>
   );
 }
@@ -89,44 +87,52 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'grey', // Dark background
+    backgroundColor: 'white', // Dark background
     paddingHorizontal: 20,
     paddingTop: 50,
-  },
-  title: {
-    color: '#fff',
-    fontSize: 24,
+    },
+    title: {
+    color: '#000',
+    fontSize: 28,
     fontWeight: 'bold',
-    textAlign: 'center',
+    textAlign: 'left',
     marginVertical: 20,
-  },
-  item: {
+    paddingLeft: 5
+    },
+    item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 15,
+    paddingVertical: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#333',
-  },
-  iconText: {
+    borderBottomColor: "#EFEFEF"
+    },
+    iconText: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  text: {
-    color: '#fff',
+    },
+    text: {
+    color: '#000000',
     fontSize: 18,
     marginLeft: 10,
-  },
-  signOutButton: {
+    fontWeight: 'bold'
+    },
+    icon: {
+    minWidth: 36,
+    textAlign: 'center',
+    fontWeight: 'bold'
+    },
+    signOutButton: {
     backgroundColor: '#6200EE', // Light blue
     padding: 15,
     marginVertical: 20,
     borderRadius: 999,
-    alignItems: 'center',
+    alignItems: 'center', // DEPRECATED
   },
   signOutText: {
-    color: '#fff',
+    color: '#FF5555',
     fontSize: 18,
     fontWeight: 'bold',
+    paddingVertical: 20,
   },
 });
