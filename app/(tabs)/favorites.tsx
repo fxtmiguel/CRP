@@ -1,5 +1,6 @@
 import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router';
+import CreateGroupChat from '../(stack)/createGroupChat';
 
 const PlaceholderImage1 = require("@/assets/images/blog1.png");
 const PlaceholderImage2 = require("@/assets/images/Gilead.jpg");
@@ -14,6 +15,11 @@ export default function ChatsScreen() {
   const handleJoinGroupChat = () => {
     // Navigate to a screen where user can join or create a new group chat
     router.push({ pathname: '../(stack)/joinGroupChat' });
+  };
+
+  const handleCreateGroupChat = () => {
+    // Navigate to a screen where user can join or create a new group chat
+    router.push({ pathname: '../(stack)/createGroupChat' });
   };
 
   return (
@@ -42,6 +48,11 @@ export default function ChatsScreen() {
       {/* Join a Group Chat Button */}
       <TouchableOpacity style={styles.joinButton} onPress={handleJoinGroupChat}>
         <Text style={styles.joinButtonText}>Join a Group Chat</Text>
+      </TouchableOpacity>
+
+      {/* Create a Group Chat Button */}
+      <TouchableOpacity style={styles.joinButton} onPress={handleCreateGroupChat}>
+        <Text style={styles.joinButtonText}>Create a Group Chat</Text>
       </TouchableOpacity>
     </View>
   );

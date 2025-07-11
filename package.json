@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@react-native-community/cli": "^18.0.0",
     "@types/jest": "^29.5.12",
     "@types/react": "~18.3.12",
     "@types/react-native": "^0.73.0",
