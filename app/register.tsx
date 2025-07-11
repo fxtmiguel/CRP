@@ -12,25 +12,29 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { router } from "expo-router";
 import { supabase } from "./SupabaseConfig"; // Import from Supabase configuration
 
+interface DropdownItem {
+  label: string;
+  value: string;
+}
 
 export default function Register() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [major, setMajor] = useState("");
-  const [ethnicity, setEthnicity] = useState(null);
-  const [gender, setGender] = useState(null);
-  const [ethnicityOpen, setEthnicityOpen] = useState(false);
-  const [genderOpen, setGenderOpen] = useState(false);
-  const [ethnicityItems, setEthnicityItems] = useState([
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [major, setMajor] = useState<string>("");
+  const [ethnicity, setEthnicity] = useState<string | null>(null);
+  const [gender, setGender] = useState<string | null>(null);
+  const [ethnicityOpen, setEthnicityOpen] = useState<boolean>(false);
+  const [genderOpen, setGenderOpen] = useState<boolean>(false);
+  const [ethnicityItems, setEthnicityItems] = useState<DropdownItem[]>([
     { label: "Asian", value: "Asian" },
     { label: "Black or African American", value: "Black" },
     { label: "Hispanic or Latino", value: "Hispanic" },
     { label: "White", value: "White" },
     { label: "Other", value: "Other" },
   ]);
-  const [genderItems, setGenderItems] = useState([
+  const [genderItems, setGenderItems] = useState<DropdownItem[]>([
     { label: "Male", value: "Male" },
     { label: "Female", value: "Female" },
     { label: "Other", value: "Other" },
@@ -43,7 +47,7 @@ export default function Register() {
         password,
       });
       if (error) throw error;
-      
+
       const user = data.user;
       if (user) {
         await supabase.from("users").insert([
@@ -81,14 +85,71 @@ export default function Register() {
       <Text style={styles.title}>Register</Text>
 
       <View style={styles.inputContainer}>
-        <TextInput style={styles.input} placeholder="First Name" value={firstName} onChangeText={setFirstName} placeholderTextColor="#aaa" />
-        <TextInput style={styles.input} placeholder="Last Name" value={lastName} onChangeText={setLastName} placeholderTextColor="#aaa" />
-        <TextInput style={styles.input} placeholder="School Email" value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" placeholderTextColor="#aaa" />
-        <TextInput style={styles.input} placeholder="Password" value={password} onChangeText={setPassword} autoCapitalize="none" placeholderTextColor="#aaa" secureTextEntry={true}/>
-        <TextInput style={styles.input} placeholder="Major" value={major} onChangeText={setMajor} placeholderTextColor="#aaa" />
-        
-        <DropDownPicker open={ethnicityOpen} value={ethnicity} items={ethnicityItems} setOpen={setEthnicityOpen} setValue={setEthnicity} setItems={setEthnicityItems} placeholder="Select Ethnicity" style={styles.dropdown} zIndex={3000} zIndexInverse={1000} />
-        <DropDownPicker open={genderOpen} value={gender} items={genderItems} setOpen={setGenderOpen} setValue={setGender} setItems={setGenderItems} placeholder="Select Gender" style={styles.dropdown} zIndex={2000} zIndexInverse={2000} />
+        <TextInput
+          style={styles.input}
+          placeholder="First Name"
+          value={firstName}
+          onChangeText={setFirstName}
+          placeholderTextColor="#aaa"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Last Name"
+          value={lastName}
+          onChangeText={setLastName}
+          placeholderTextColor="#aaa"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="School Email"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+          placeholderTextColor="#aaa"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          autoCapitalize="none"
+          placeholderTextColor="#aaa"
+          secureTextEntry={true}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Major"
+          value={major}
+          onChangeText={setMajor}
+          placeholderTextColor="#aaa"
+        />
+
+        <DropDownPicker
+          open={ethnicityOpen}
+          value={ethnicity}
+          items={ethnicityItems}
+          setOpen={setEthnicityOpen}
+          setValue={setEthnicity}
+          setItems={setEthnicityItems}
+          placeholder="Select Ethnicity"
+          style={styles.dropdown}
+          zIndex={3000} // Higher zIndex so it stays on top when open
+          zIndexInverse={1000}
+        />
+
+        <DropDownPicker
+          open={genderOpen}
+          value={gender}
+          items={genderItems}
+          setOpen={setGenderOpen}
+          setValue={setGender}
+          setItems={setGenderItems}
+          placeholder="Select Gender"
+          style={styles.dropdown}
+          zIndex={2000} // Lower zIndex so it doesn't overlap ethnicity dropdown
+          zIndexInverse={4000} // Ensures proper stacking when closed
+        />
       </View>
 
       <TouchableOpacity onPress={handleBackPress}>
@@ -165,3 +226,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
