@@ -108,15 +108,18 @@ export default function ChatScreen() {
             data={messages}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => {           
-              const isMe = item.user_id == userId   
-              const time = new Date(item.created_at).toLocaleTimeString([], {
+              const isMe = item.user_id == userId
+              const dateObj = new Date(item.created_at)   
+              const time = dateObj.toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
               });
+              const date = dateObj.toLocaleDateString();
+              const timeAndDate = `${time} on ${date}`;
               return(
                 <View style={isMe ? styles.myMessage : styles.otherMessage}>
                   <Text style={styles.senderName}>{item.users.name}</Text>
-                  <Text style={styles.timestamp}>{time}</Text>
+                  <Text style={styles.timestamp}>{timeAndDate}</Text>
                   <Text style={styles.messageText}>{item.message}</Text>
                 </View>
               );
