@@ -18,13 +18,15 @@ export default function JoinGroupChat() {
   const handleCreation = async () => {
 
     try {
-      const {data, error} = await supabase.rpc('joingroupchat', {
-        group_id: "1ddfd19e-0bb1-4708-aab1-6249bbcc467c",
-        user_id: "21e7e869-bc86-40be-b539-4d334a08e36b",
-      });
+      // Attempts to join based on user inputted grou pname 
+      const {data: group, error: groupError} = await supabase
+        .from('groups')
+        .select('id')
+        .eq('name', groupChatName.trim())
+        .single();
 
-      if (error) {
-        console.error("Error joining group chat:", error);
+      if (groupError) {
+        console.error("Error joining group chat:", groupError);
         setErrorMessage("Failed to join group chat.");
         return;
       }
