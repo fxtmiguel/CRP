@@ -3,7 +3,7 @@ import { View, Text, Image, Button, StyleSheet, ActivityIndicator } from 'react-
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import * as Linking from 'expo-linking';
-import { supabase } from './SupabaseConfig';
+import { supabase } from '../SupabaseConfig';
 
 
 export default function GroupDetailsScreen() {
@@ -52,12 +52,12 @@ export default function GroupDetailsScreen() {
       <Text style={styles.title}>{eventName} Resources</Text>
 
       <View style={styles.card}>
-        <Image source={require('../assets/images/CRPtrans.png')} style={styles.image} />
+        <Image source={require('../../assets/images/CRPtrans.png')} style={styles.image} />
         <Button title="Open Liability Form" onPress={() => Linking.openURL(data.liability_form)} />
       </View>
 
       <View style={styles.card}>
-        <Image source={require('../assets/images/survey.png')} style={styles.image} />
+        <Image source={require('../../assets/images/survey.png')} style={styles.image} />
         <Button title="Open Survey" onPress={() => Linking.openURL(data.survey)} />
       </View>
     </View>
